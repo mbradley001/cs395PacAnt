@@ -1,7 +1,9 @@
 class Node:
-  def __init__(self, phero, ch):
+  def __init__(self, phero, ch, x, y):
     self.phero = phero
     self.c = ch
+    self.x = x
+    self.y = y
 
 class Board:
   def __init__(self, boardL):
@@ -10,12 +12,16 @@ class Board:
     self.arr = []
 
   def parseBoard(self):
+    j = 0
     for line in self.b:
+      i = 0
       xlist = []
       for ch in line:
-        n = Node(0, ch)
+        n = Node(0, ch, i, j)
         xlist.append(n)
+        i+=1
       self.arr.append(xlist)
+      j+=1
 
   def printBoard(self):
     for line in self.arr:
