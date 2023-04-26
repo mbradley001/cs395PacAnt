@@ -1,16 +1,26 @@
 class Node:
   def __init__(self, phero, ch):
     self.phero = phero
-    self.ch = ch
+    self.c = ch
 
 class Board:
   def __init__(self, boardL):
     self.b = boardL
+    rows, cols = (23,16)
+    self.arr = []
+
+  def parseBoard(self):
+    for line in self.b:
+      xlist = []
+      for ch in line:
+        n = Node(0, ch)
+        xlist.append(n)
+      self.arr.append(xlist)
 
   def printBoard(self):
-    for line in self.b:
-      for ch in line:
-        print(ch, end='')
+    for line in self.arr:
+      for n in line:
+        print(n.c, end='')
       print()
 
 def main():
@@ -40,6 +50,7 @@ def main():
     "XXXXXXXXXXXXXXXX"]
 
   board = Board(b)
+  board.parseBoard()
   board.printBoard()
 
 main()
