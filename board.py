@@ -23,6 +23,16 @@ class Board:
       self.arr.append(xlist)
       j+=1
 
+  def findPiece(self, c):
+    foundList = []
+    for xList in self.arr:
+      for n in xList:
+        if n.c == c:
+          foundList.append(n)
+    for n in foundList:
+      print("Piece: " + n.c + "\nFound at: (" + str(n.x) + ", " + str(n.y) + ")\n")
+    return foundList
+
   def printBoard(self):
     for line in self.arr:
       for n in line:
@@ -58,5 +68,6 @@ def main():
   board = Board(b)
   board.parseBoard()
   board.printBoard()
+  board.findPiece("G")
 
 main()
