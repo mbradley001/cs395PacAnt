@@ -2,8 +2,9 @@ import random as rn
 import numpy as np
 from numpy.random import choice as np_choice
 
+#Creates AntColony class
 class AntColony(object):
-
+    #Creates initial values
     def __init__(self, board, n_ants, decay, alpha=1, beta=1):
 
         self.board = board
@@ -12,6 +13,7 @@ class AntColony(object):
         self.alpha = alpha
         self.beta = beta
 
+    #Runs Ant Algorithm
     def run(self):
         shortest_path = 0
 	shortest_path_board;
@@ -25,14 +27,17 @@ class AntColony(object):
         print(shortest_path_board));     
         return shortest_path
 
+    #Updates pheromone value
     def update_pheronome(self, path):        
         for node in path:
 	        node.phero *= self.decay
                 node.phero += ...
 
+    #Gets path distance
     def path_dist(self, path):
         return len(path)
 
+    #Generates Ant
     def gen_ant(self, start):
         path = []
         visited = []
@@ -45,7 +50,7 @@ class AntColony(object):
             visited.append(move)
         path.append((prev, start)) # going back to where we started    
         return path
-
+    #Picks move based on phero value
     def pick_move(self, pheromone, dist, visited):
         pheromone = np.copy(pheromone)
         pheromone[list(visited)] = 0
