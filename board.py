@@ -28,7 +28,7 @@ class Board:
       self.arr.append(xlist)
       j+=1
   
-  #Find piecs in board(ANT, Ghost, POtato)
+  #Find pieces in board(ANT, Ghost, POtato)
   def findPiece(self, c):
     foundList = []
     for xList in self.arr:
@@ -46,6 +46,7 @@ class Board:
         print(n.c, end='')
       print()
 
+#driver function
 def main():
 #Board look so shiny
   b = [
