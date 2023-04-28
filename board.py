@@ -1,16 +1,21 @@
+#Creates Node class
 class Node:
+  #Creates and gives initial values 
   def __init__(self, phero, ch, x, y):
     self.phero = phero
     self.c = ch
     self.x = x
     self.y = y
 
+#Creates board
 class Board:
+#gets initial board values
   def __init__(self, boardL):
     self.b = boardL
     rows, cols = (23,16)
     self.arr = []
-
+  
+  #Parse through board
   def parseBoard(self):
     j = 0
     for line in self.b:
@@ -22,7 +27,19 @@ class Board:
         i+=1
       self.arr.append(xlist)
       j+=1
+  
+  #Find piecs in board(ANT, Ghost, POtato)
+  def findPiece(self, c):
+    foundList = []
+    for xList in self.arr:
+      for n in xList:
+        if n.c == c:
+          foundList.append(n)
+    for n in foundList:
+      print("Piece: " + n.c + "\nFound at: (" + str(n.x) + ", " + str(n.y) + ")\n")
+    return foundList
 
+  #Prints the board
   def printBoard(self):
     for line in self.arr:
       for n in line:
@@ -30,6 +47,7 @@ class Board:
       print()
 
 def main():
+#Board look so shiny
   b = [
     "XXXXXXXXXXXXXXXX",
     "XP     XX   G  X",
@@ -58,5 +76,6 @@ def main():
   board = Board(b)
   board.parseBoard()
   board.printBoard()
+  board.findPiece("G")
 
 main()
