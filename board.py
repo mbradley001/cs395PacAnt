@@ -6,14 +6,29 @@ class Node:
     self.c = ch
     self.x = x
     self.y = y
+    #TODO overload comparison operators to compare phero
 
 #Creates board
 class Board:
 #gets initial board values
-  def __init__(self, boardL):
-    self.b = boardL
-    rows, cols = (23,16)
+  def __init__(self):
+
+    self.b = [
+    "XXXXXXXXXXXXXXXX",
+    "X P    XX    G X",
+    "X X    XX XXXX X",
+    "X      XX XXXX X",
+    "X      XX XXXX X",
+    "X              X",
+    "X              X",
+    "X X          X X",
+    "X X XXX  XXX X X",
+    "XG    O    XG  X",
+    "XXXXXXXXXXXXXXXX"]
+
+    self.rows, self.cols = len(self.b[0]), len(self.b)
     self.arr = []
+    self.parseBoard()
   
   #Parse through board
   def parseBoard(self):
@@ -22,31 +37,36 @@ class Board:
       i = 0
       xlist = []
       for ch in line:
-        n = Node(0, ch, i, j)
+        n = Node(1, ch, j, i)
         xlist.append(n)
         i+=1
       self.arr.append(xlist)
       j+=1
-  
-  #Find pieces in board(ANT, Ghost, POtato)
+
+  #Find piecs in board(ANT, Ghost, POtato)
   def findPiece(self, c):
     foundList = []
     for xList in self.arr:
       for n in xList:
         if n.c == c:
           foundList.append(n)
-    for n in foundList:
-      print("Piece: " + n.c + "\nFound at: (" + str(n.x) + ", " + str(n.y) + ")\n")
     return foundList
+
+  #resets the chars in each node back to start state
+  def reset_chars(self):
+     for c in range(self.rows):
+        for r in range(self.cols):
+           self.arr[r][c].c = self.b[r][c]
 
   #Prints the board
   def printBoard(self):
     for line in self.arr:
       for n in line:
-        print(n.c, end='')
+        print(n.c, end=" ") 
       print()
+    print("\n\n\n")
 
-#driver function
+  """
 def main():
 #Board look so shiny
   b = [
@@ -79,4 +99,4 @@ def main():
   board.printBoard()
   board.findPiece("G")
 
-main()
+main()"""
