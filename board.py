@@ -12,19 +12,23 @@ class Node:
 class Board:
 #gets initial board values
   def __init__(self):
-
+    
     self.b = [
-    "XXXXXXXXXXXXXXXX",
-    "X P    XX    G X",
-    "X X    XX XXXX X",
-    "X      XX XXXX X",
-    "X      XX XXXX X",
-    "X              X",
-    "X              X",
-    "X X          X X",
-    "X X XXX  XXX X X",
-    "XG    O    XG  X",
-    "XXXXXXXXXXXXXXXX"]
+    "XXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "X      XX              G X",
+    "X X    XX           XXXX X",
+    "X      XX       P   XXXX X",
+    "X      XX  XXX      XXXX X",
+    "X      XX    X  XX       X",
+    "X XXX  XX    X   X X     X",
+    "X   X        X   X    X  X",
+    "X   XX XXXX           X  X",
+    "X            XXXX X   X  X",
+    "X    X    XXXXXXX    XXXGX",
+    "X X  X                 X X",
+    "X X XXX  XXXXX  X  XXX X X",
+    "XG    O         X    X   X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXX"]
 
     self.rows, self.cols = len(self.b[0]), len(self.b)
     self.arr = []
@@ -65,8 +69,9 @@ class Board:
         print(n.c, end=" ") 
       print()
     print("\n\n\n")
+ 
 
-  """
+"""
 def main():
 #Board look so shiny
   b = [

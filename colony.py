@@ -1,6 +1,7 @@
 import random as ran
 from board import Node, Board
 
+
 #Creates AntColony class
 class AntColony(object):
     #Creates initial values
@@ -12,27 +13,36 @@ class AntColony(object):
         self.alpha = alpha
         self.beta = beta
 
-    def unleash_the_ants(self):
+    def decayBoard(self):
+        for xList in self.board.arr:
+            for n in xList:
+                n.phero = n.phero * self.decay
 
-        shortest_path = []
+    def unleash_the_ants(self):
+        
+        shortest_path = set()
         for i in range(self.n_ants):
             path = self.gen_path()
            
             if self.path_dist(shortest_path) >= self.path_dist(path) and self.path_dist(path) != 0:
                 shortest_path = path
 
+            self.decayBoard()
             self.update_pheronome(path)
-            self.board.printBoard()
+            if i%10 == 0:
+              self.board.printBoard()
             self.board.reset_chars()
+            path.clear() 
 
         return shortest_path
+
 
     def update_pheronome(self, path):        
         for node in path:
             if(self.path_dist(path) > 0):
-               node.phero = node.phero*self.decay + (1/self.path_dist(path))
+               node.phero += 1/self.path_dist(path)
             else:
-               node.phero = node.phero*self.decay
+               pass
 
     def path_dist(self, path):
         return len(path)
@@ -40,19 +50,19 @@ class AntColony(object):
 
     def gen_path(self):
 #print("Gen path\n")
-        path = []
+        path = set()
         pac = self.board.findPiece('P')[0]#start node for pac
 
         while(True):
             move = self.pick_pac_move(pac)
 #print(str(move) + " <-move")
-            if(move == pac):
+            if(move.x == pac.x and move.y == pac.y):
                path.clear()
                return path
 
             atTarget = self.movePiece(pac, move)
 
-            path.append(move)
+            path.add(move)
             pac = move
 
             if(atTarget):
@@ -72,7 +82,8 @@ class AntColony(object):
 #      print("Move X", moves[0].x,"move Y", moves[0].y)
 #print("Move X", moves[1].x,"move Y", moves[1].y)
        for m in moves:
-           if(m.c == 'G' or m.c == '*'):
+# print(m.c == 'G' or m.c == '*')
+           if(m.c == 'G'):# or m.c == '*' or m.c == 'P'):
                moves.remove(m)
 
        if(len(moves) ==0):
@@ -98,12 +109,13 @@ class AntColony(object):
 
     def moveGhosts(self, pac):
        ghosts = self.board.findPiece('G')
-
+       
        for g in ghosts:
 #print("ghost(",g.x,",",g.y,")")
            move = self.pick_ghost_move(g, pac)
            if (self.movePiece(g, move)):
                return True
+          
 
     def movePiece(self, n1, n2):
 #        print(type(n1))
@@ -112,6 +124,8 @@ class AntColony(object):
                self.board.arr[n1.x][n1.y].c = '.'
                self.board.arr[n2.x][n2.y].c = '@'
                return True
+            elif(n2.c == 'G'):
+               pass
             else:
                self.board.arr[n1.x][n1.y].c = '.'
                self.board.arr[n2.x][n2.y].c = 'G'
@@ -120,7 +134,7 @@ class AntColony(object):
             if(n2.c == 'O'):
                self.board.arr[n1.x][n1.y].c = '*'
                self.board.arr[n2.x][n2.y].c = '$'
-               return True   
+               return True  
             else:
                self.board.arr[n1.x][n1.y].c = '*'
                self.board.arr[n2.x][n2.y].c = 'P'
@@ -136,7 +150,7 @@ class AntColony(object):
 
        if(len(moves) == 0):
           return ghost
-
+       
        choice = moves[0]
 
        for m in moves:
@@ -179,8 +193,6 @@ class AntColony(object):
        return moves
 
 board = Board()
-ant = AntColony(board, 10, .25)
+ant = AntColony(board, 100, .75)
 print ("Path length: ", len(ant.unleash_the_ants()))
-
-
 
