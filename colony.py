@@ -5,18 +5,19 @@ from board import Node, Board
 #Creates AntColony class
 class AntColony(object):
     #Creates initial values
-    def __init__(self, board, n_ants, decay, alpha=1, beta=1):
+    def __init__(self, board, n_ants, decay, alpha=1):
 
         self.board = board
         self.n_ants = n_ants
         self.decay = decay
         self.alpha = alpha
-        self.beta = beta
 
     def decayBoard(self):
         for xList in self.board.arr:
             for n in xList:
-                n.phero = n.phero * self.decay
+                n.phero -= n.phero * self.decay
+                if n.phero < self.board.startP:
+                   n.phero = self.board.startP
 
     def unleash_the_ants(self):
         
@@ -29,8 +30,10 @@ class AntColony(object):
 
             self.decayBoard()
             self.update_pheronome(path)
-            if i%10 == 0:
-              self.board.printBoard()
+
+            if i%10 == 0 and len(path) != 0:
+              self.board.print_path(path)
+
             self.board.reset_chars()
             path.clear() 
 
@@ -39,10 +42,8 @@ class AntColony(object):
 
     def update_pheronome(self, path):        
         for node in path:
-            if(self.path_dist(path) > 0):
-               node.phero += 1/self.path_dist(path)
-            else:
-               pass
+               node.phero += self.alpha*(1/self.path_dist(path))
+
 
     def path_dist(self, path):
         return len(path)
@@ -70,21 +71,18 @@ class AntColony(object):
 
             atePac = self.moveGhosts(pac)
             if(atePac):
+               path.clear()
                break
 
         return path
 
 
     def pick_pac_move(self, p):
-       moves = self.find_moves(p)
-
-#print("PMove X", p.x,"Pmove Y", p.y)
-#      print("Move X", moves[0].x,"move Y", moves[0].y)
-#print("Move X", moves[1].x,"move Y", moves[1].y)
-       for m in moves:
-# print(m.c == 'G' or m.c == '*')
-           if(m.c == 'G'):# or m.c == '*' or m.c == 'P'):
-               moves.remove(m)
+       tmp = self.find_moves(p)
+       moves = []
+       for m in tmp:
+           if(m.c != 'G' and m.c != '*'):
+               moves.append(m)
 
        if(len(moves) ==0):
            return p
@@ -95,6 +93,9 @@ class AntColony(object):
        total = 0
        for m in moves:
             total += m.phero
+
+       if total == 0:
+          return moves[ran.randint(0, len(moves)-1)]
 
        sorted(moves, key=lambda x: x.phero)
        num = ran.random()
@@ -143,10 +144,11 @@ class AntColony(object):
 
     #chooses ideal ghost move for seeking behavior
     def pick_ghost_move(self, ghost, p):
-       moves = self.find_moves(ghost)
-       for m in moves:
-          if(m.c == 'O'):
-             moves.remove(m)
+       tmp = self.find_moves(ghost)
+       moves = []
+       for m in tmp:
+          if(m.c != 'O'):
+             moves.append(m)
 
        if(len(moves) == 0):
           return ghost
@@ -161,9 +163,6 @@ class AntColony(object):
        return choice 
 
 
-    #returns path length
-    def path_dist(self, path):
-        return len(path)
 
     def manhattan(self, g, pac):
          return (abs(pac.x - g.x) + abs(pac.y - g.y)) 
@@ -192,7 +191,7 @@ class AntColony(object):
 #      print("Number of moves found", len(moves), "\n")
        return moves
 
-board = Board()
-ant = AntColony(board, 100, .75)
-print ("Path length: ", len(ant.unleash_the_ants()))
+board = Board(0)
+ant = AntColony(board, 1000, .65, 1)
+ant.unleash_the_ants()
 

@@ -11,7 +11,7 @@ class Node:
 #Creates board
 class Board:
 #gets initial board values
-  def __init__(self):
+  def __init__(self, p):
     
     self.b = [
     "XXXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -29,7 +29,7 @@ class Board:
     "X X XXX  XXXXX  X  XXX X X",
     "XG    O         X    X   X",
     "XXXXXXXXXXXXXXXXXXXXXXXXXX"]
-
+    self.startP = p
     self.rows, self.cols = len(self.b[0]), len(self.b)
     self.arr = []
     self.parseBoard()
@@ -41,11 +41,24 @@ class Board:
       i = 0
       xlist = []
       for ch in line:
-        n = Node(1, ch, j, i)
+        n = Node(self.startP, ch, j, i)
         xlist.append(n)
         i+=1
       self.arr.append(xlist)
       j+=1
+
+  def print_path(self, path):
+     nodes = self.arr
+     for p in path:
+        if nodes[p.x][p.y].c  != '$': 
+           nodes[p.x][p.y].c = '*' 
+
+     for line in nodes:
+       for n in line:
+         print(n.c, end=" ") 
+       print()
+     print("\n\n\n")
+
 
   #Find piecs in board(ANT, Ghost, POtato)
   def findPiece(self, c):
